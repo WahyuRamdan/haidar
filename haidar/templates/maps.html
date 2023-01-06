@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>About Us - Brand</title>
+    <link rel="icon" type="image/jpeg" sizes="2000x1333" href="{% get_static_prefix %}assets/img/thomas-serer-r-xKieMqL34-unsplash.jpg">
+    <link rel="icon" type="image/jpeg" sizes="2000x1333" href="{% get_static_prefix %}assets/img/thomas-serer-r-xKieMqL34-unsplash.jpg">
+    <link rel="icon" type="image/jpeg" sizes="2000x1333" href="{% get_static_prefix %}assets/img/thomas-serer-r-xKieMqL34-unsplash.jpg">
+    <link rel="icon" type="image/jpeg" sizes="2000x1333" href="{% get_static_prefix %}assets/img/thomas-serer-r-xKieMqL34-unsplash.jpg">
+    <link rel="icon" type="image/jpeg" sizes="2000x1333" href="{% get_static_prefix %}assets/img/thomas-serer-r-xKieMqL34-unsplash.jpg">
+    <link rel="stylesheet" href="{% get_static_prefix %}assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i&amp;display=swap">
+    <link rel="stylesheet" href="{% get_static_prefix %}assets/css/Footer-Dark-Multi-Column-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.css">
+    <link rel="stylesheet" href="{% get_static_prefix %}assets/css/Ludens-basic-login.css">
+    <link rel="stylesheet" href="{% get_static_prefix %}assets/css/MUSA_panel-table-panel-table.css">
+    <link rel="stylesheet" href="{% get_static_prefix %}assets/css/MUSA_panel-table.css">
+    <link rel="stylesheet" href="{% get_static_prefix %}assets/css/Table-With-Search-search-table.css">
+    <link rel="stylesheet" href="{% get_static_prefix %}assets/css/Table-With-Search.css">
+    <link rel="stylesheet" href="{% get_static_prefix %}assets/css/vanilla-zoom.min.css">
+
+
+    <!-- Leaflet JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin=""></script>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">
+        <div class="container"><a class="navbar-brand logo" href="#">Muhammad Haidar</a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    {% if request.user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link" href="/maps">maps</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/table">Table Pemain</a></li>
+                    {% endif %}
+                    <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main class="page">
+        <section class="clean-block about-us">
+            <div class="container mt-5">
+                <div class="row justify-content-center">
+                    <div class="col">
+                        <h2 class="text-info text-center">Maps</h2>
+
+                        <div id="map-box" style="height: 300px;"></div>
+                    </div>
+                </div>
+                <div class="block-heading">
+                    <div class="row">
+                        <div class="col-6">
+                            <h2 class="text-info text-start">Tambah Data / Edit data</h2>
+                            <form method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="lokasi" id="map-input" value="">
+                                
+                                {% if map_id %}
+                                    <input type="text" required class="form-control mt-3 mb-3" style="width: 300px;" value="{{map_id.club}}" name="kode" id="map-input">
+                                {% else %}
+                                    <input type="text" required class="form-control mt-3 mb-3" style="width: 300px;" placeholder="Kode...." name="kode" id="map-input">
+                                {% endif %}
+                                <button class="btn btn-primary" type="submit">Save</button>
+                            </form>
+                        </div>
+                        <div class="col-6">
+                            <div class="table-responsive table table-hover table-bordered results">
+                                <table class="table table-hover table-bordered">
+                                    <thead class="bill-header cs">
+                                        <tr>
+                                            <th id="trs-hd-1" class="col-lg-1">No</th>
+                                            <th id="trs-hd-2" class="col-lg-2">NAMA CLUB</th>
+                                            <th id="trs-hd-3" class="col-lg-3">Titik Kordinat</th>
+                                            <th id="trs-hd-6" class="col-lg-2">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                        {% for map in maps %}
+                                            <tr>
+                                                <td>{{forloop.counter}}</td>
+                                                <td>{{map.club}}</td>
+                                                <td>{{map.lokasi}}</td>
+                                                <td>
+                                                    <a class="btn btn-success" style="margin-left: 5px;" href="/maps/{{map.id}}">update</a>
+                                                    <a class="btn btn-danger" style="margin-left: 5px;" href="/maps/hapus/{{map.id}}">Del</a></td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+    </main>
+    <footer class="text-white bg-dark">
+        <div class="container py-4 py-lg-5">
+            <div class="d-flex justify-content-between align-items-center pt-3">
+                <p class="mb-0">Copyright © 2023 Muhamad Haidar</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Leaflet JS
+        const map = L.map('map-box').setView([0,0], 0); 
+        const map_input = document.getElementById("map-input")
+        
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 50,
+        }).addTo(map);
+        map.setView(new L.LatLng(-6.91224860844371 , 107.6022949302569), 2)
+        
+        {% if map_id %}
+        let lokasi = '{{map_id.lokasi}}'
+        let current_maker = lokasi.split(",")
+        console.log(current_maker)
+
+        const maker = L.marker([current_maker[0],current_maker[1]]).addTo(map)
+        map_input.value = `${current_maker[0]}, ${current_maker[1]}`
+            {% else %}
+        const maker = L.marker([-6.91224860844371 , 107.6022949302569]).addTo(map)
+        map_input.value = `-6.91224860844371 , 107.6022949302569`
+        {% endif %}
+        
+        map.on('click', function (e) {
+        const {lat, lng} = e.latlng
+        map_input.value = `${lat} , ${lng}`
+        maker.setLatLng([lat, lng]) 
+        })
+        // end leaflet jS
+    </script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.js"></script>
+    <script src="{% get_static_prefix %}assets/js/vanilla-zoom.js"></script>
+    <script src="{% get_static_prefix %}assets/js/theme.js"></script>
+    <script src="{% get_static_prefix %}assets/js/Table-With-Search.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Pricing - Brand</title>
+    <link rel="icon" type="image/jpeg" sizes="2000x1333" href="{% get_static_prefix %}assets/img/thomas-serer-r-xKieMqL34-unsplash.jpg">
+    <link rel="icon" type="image/jpeg" sizes="2000x1333" href="{% get_static_prefix %}assets/img/thomas-serer-r-xKieMqL34-unsplash.jpg">
+    <link rel="icon" type="image/jpeg" sizes="2000x1333" href="{% get_static_prefix %}assets/img/thomas-serer-r-xKieMqL34-unsplash.jpg">
+    <link rel="icon" type="image/jpeg" sizes="2000x1333" href="{% get_static_prefix %}assets/img/thomas-serer-r-xKieMqL34-unsplash.jpg">
+    <link rel="icon" type="image/jpeg" sizes="2000x1333" href="{% get_static_prefix %}assets/img/thomas-serer-r-xKieMqL34-unsplash.jpg">
+    <link rel="stylesheet" href="{% get_static_prefix %}assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i&amp;display=swap">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% get_static_prefix %}assets/fonts/fontawesome5-overrides.min.css">
+    <link rel="stylesheet" href="{% get_static_prefix %}assets/css/Footer-Dark-Multi-Column-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.css">
+    <link rel="stylesheet" href="{% get_static_prefix %}assets/css/Ludens-basic-login.css">
+    <link rel="stylesheet" href="{% get_static_prefix %}assets/css/MUSA_panel-table-panel-table.css">
+    <link rel="stylesheet" href="{% get_static_prefix %}assets/css/MUSA_panel-table.css">
+    <link rel="stylesheet" href="{% get_static_prefix %}assets/css/Table-With-Search-search-table.css">
+    <link rel="stylesheet" href="{% get_static_prefix %}assets/css/Table-With-Search.css">
+    <link rel="stylesheet" href="{% get_static_prefix %}assets/css/vanilla-zoom.min.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">
+        <div class="container"><a class="navbar-brand logo" href="#">Muhammad Haidar</a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    {% if request.user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link" href="/maps">maps</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/table">Table Pemain</a></li>
+                    {% endif %}
+                    <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main class="page pricing-table-page">
+        <section class="clean-block clean-pricing dark">
+            <div class="container">
+                <div class="block-heading">
+                    <h2 class="text-info">Tabel</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in, mattis vitae leo.</p>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-5 col-lg-7">
+                        <div class="table-responsive table table-hover table-bordered results">
+                            <table class="table table-hover table-bordered">
+                                <thead class="bill-header cs">
+                                    <tr>
+                                        <th id="trs-hd-1" class="col-lg-1">No</th>
+                                        <th id="trs-hd-2" class="col-lg-2">NAMA CLUB</th>
+                                        <th id="trs-hd-3" class="col-lg-3">Nama Pemain</th>
+                                        <th id="trs-hd-3" class="col-lg-3">Tahun Bergabung</th>
+                                        <th id="trs-hd-6" class="col-lg-2">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                    {% for club in clubs %}                                        
+                                        <tr>
+                                            <td>{{forloop.counter}}</td>
+                                            <td>{{club.club}}</td>
+                                            <td>{{club.nama_pemain}}</td>
+                                            <td>{{club.tahun_join}}</td>
+                                            <td>
+                                                <a class="btn btn-success" style="margin-left: 5px;" href="/table/{{club.id}}"><i class="fa fa-check" style="font-size: 15px;"></i></a>
+                                                <a class="btn btn-danger" style="margin-left: 5px;" href="/table/hapus/{{club.id}}"><i class="fa fa-trash" style="font-size: 15px;"></i></a></td>
+                                        </tr>
+                                    {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-lg-4">
+                        <div class="clean-pricing-item">
+                            <div class="heading">
+                                <h3>Tambah Data</h3>
+                            </div>
+                            <div class="features">
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    
+                                    {% if club_id %}
+                                        <input type="text" class="form-control mb-3" name="nama" value="{{club_id.club}}">
+                                        <input type="text" class="form-control mb-3" name="alamat" value="{{club_id.nama_pemain}}">
+                                        <input type="text" class="form-control mb-3" name="keterangan" value="{{club_id.tahun_join}}">
+                                        <button class="btn btn-outline-primary d-block w-100" type="submit">Save</button>
+                                        {% else %}
+                                        <input type="text" class="form-control mb-3" name="nama" placeholder="Nama Club...">
+                                        <input type="text" class="form-control mb-3" name="alamat" placeholder="Nama Pemain....">
+                                        <input type="text" class="form-control mb-3" name="keterangan" placeholder="Tahun Join...">
+                                        <button class="btn btn-outline-primary d-block w-100" type="submit">Save</button>
+                                    {% endif %}
+                                        
+                                    
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="text-white bg-dark">
+        <div class="container py-4 py-lg-5">
+            <div class="d-flex justify-content-between align-items-center pt-3">
+                <p class="mb-0">Copyright © 2023 Muhamad Haidar</p>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.js"></script>
+    <script src="{% get_static_prefix %}assets/js/vanilla-zoom.js"></script>
+    <script src="{% get_static_prefix %}assets/js/theme.js"></script>
+    <script src="{% get_static_prefix %}assets/js/Table-With-Search.js"></script>
+</body>
+
+</html>
